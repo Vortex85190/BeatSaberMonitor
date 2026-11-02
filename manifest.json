@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
+  "id": "HardwareHud",
+  "name": "HardwareHud",
+  "author": "Toi",
+  "version": "1.0.0",
+  "description": "HUD de monitoring en jeu : température et utilisation CPU/GPU, VRAM, avec graphiques positionnables.",
+  "gameVersion": "1.40.8",
+  "dependsOn": {
+    "BSIPA": "^4.3.0",
+    "BeatSaberMarkupLanguage": "^1.0.0"
+  }
+}

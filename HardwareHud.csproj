@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>HardwareHud</AssemblyName>
+    <RootNamespace>HardwareHud</RootNamespace>
+    <Nullable>disable</Nullable>
+    <DebugType>portable</DebugType>
+    <!-- Adapte ce chemin, ou passe -p:BeatSaberDir="..." à dotnet build -->
+    <BeatSaberDir Condition=" '$(BeatSaberDir)' == '' ">D:\steam\steamapps\common\Beat Saber</BeatSaberDir>
+    <Managed>$(BeatSaberDir)\Beat Saber_Data\Managed</Managed>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="IPA.Loader"><HintPath>$(Managed)\IPA.Loader.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="HMLib"><HintPath>$(Managed)\HMLib.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.TextMeshPro"><HintPath>$(Managed)\Unity.TextMeshPro.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(Managed)\UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(Managed)\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.UI"><HintPath>$(Managed)\UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.UIModule"><HintPath>$(Managed)\UnityEngine.UIModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.XRModule"><HintPath>$(Managed)\UnityEngine.XRModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.TextRenderingModule"><HintPath>$(Managed)\UnityEngine.TextRenderingModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.TextCoreModule"><HintPath>$(Managed)\UnityEngine.TextCoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.JSONSerializeModule"><HintPath>$(Managed)\UnityEngine.JSONSerializeModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.InputLegacyModule"><HintPath>$(Managed)\UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.4" />
+    <EmbeddedResource Include="manifest.json" />
+	<EmbeddedResource Include="settings.bsml" />
+  </ItemGroup>
+
+  <!-- Copie le plugin dans Plugins\ et les dépendances dans Libs\ -->
+  <Target Name="DeployToGame" AfterTargets="Build" Condition="Exists('$(BeatSaberDir)')">
+    <ItemGroup>
+      <PluginFile Include="$(OutDir)HardwareHud.dll" />
+      <LibFile Include="$(OutDir)*.dll" Exclude="$(OutDir)HardwareHud.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PluginFile)" DestinationFolder="$(BeatSaberDir)\Plugins" />
+    <Copy SourceFiles="@(LibFile)" DestinationFolder="$(BeatSaberDir)\Libs" />
+  </Target>
+
+</Project>
