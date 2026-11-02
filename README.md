@@ -39,7 +39,7 @@ Le mode édition s'active avec **les deux sticks cliqués en même temps** (VR) 
 | Grip (une main) | attraper et déplacer / tourner le panneau |
 | Stick haut / bas pendant le grip | agrandir / réduire |
 | Flèches, PageUp/PageDown | déplacer (X/Y, profondeur) |
-| Q / E | tourner |
+| 1 / 2 | tourner |
 | + / - | taille |
 
 Relance le même geste pour valider : la position est sauvegardée. Il y a **deux profils** : un pour le menu, un pour en jeu (à faire une fois dans chaque contexte).
