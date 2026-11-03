@@ -9,6 +9,8 @@ namespace HardwareHud
     {
         internal static IPALogger Log { get; private set; }
         internal static HudConfig Config { get; private set; }
+        internal static HudController Hud { get; private set; }
+        internal static SensorReader Reader { get; private set; }
 
         SensorReader _reader;
         GameObject _host;
@@ -31,20 +33,16 @@ namespace HardwareHud
 
             _reader = new SensorReader(Config.updateIntervalMs, Log);
             _reader.Start();
+            Reader = _reader;
 
             _host = new GameObject("HardwareHudHost");
             Object.DontDestroyOnLoad(_host);
             var hud = _host.AddComponent<HudController>();
             hud.Init(_reader, Config);
 
-            try
-            {
-                SettingsMenu.Register(Config, hud);
-            }
-            catch (System.Exception e)
-            {
-                Log.Warn("Menu de réglages indisponible (BSML manquant ?) : " + e.Message);
-            }
+            Hud = hud;
+
+            // Le bouton du menu MODS est ajouté par HudController (réessais jusqu'à ce que BSML soit prêt)
 
             Log.Info("HardwareHud démarré.");
         }

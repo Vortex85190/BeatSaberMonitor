@@ -1,0 +1,51 @@
+<vertical xmlns="https://monkeymanboy.github.io/BSML-Docs/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd" pad="2" spacing="1">
+  <tab-selector tab-tag="hwtabs" />
+
+  <!-- Tab 1: which info to track -->
+  <tab tags="hwtabs" tab-name="Tracked info">
+    <settings-container>
+      <bool-setting text="CPU temperature" value="showCpuTemp" apply-on-change="true" bind-value="true" hover-hint="Processor temperature + graph" />
+      <bool-setting text="CPU usage" value="showCpuLoad" apply-on-change="true" bind-value="true" hover-hint="Processor usage + graph" />
+      <bool-setting text="GPU temperature" value="showGpuTemp" apply-on-change="true" bind-value="true" hover-hint="Graphics card temperature + graph" />
+      <bool-setting text="GPU usage" value="showGpuLoad" apply-on-change="true" bind-value="true" hover-hint="Graphics card usage + graph" />
+      <bool-setting text="VRAM used" value="showVram" apply-on-change="true" bind-value="true" hover-hint="Video memory used / total + graph" />
+      <bool-setting text="VRAM temperature" value="showVramTemp" apply-on-change="true" bind-value="true" hover-hint="Video memory temperature (if your card reports it)" />
+      <bool-setting text="System RAM" value="showRam" apply-on-change="true" bind-value="true" hover-hint="System memory used / total + graph" />
+      <bool-setting text="GPU Hot Spot" value="showGpuHotSpot" apply-on-change="true" bind-value="true" hover-hint="Temperature of the hottest point of the graphics card" />
+    </settings-container>
+  </tab>
+
+  <!-- Tab 2: temperature color thresholds -->
+  <tab tags="hwtabs" tab-name="Temp. thresholds">
+    <settings-container>
+      <slider-setting text="CPU orange at (°C)" value="cpuWarnTemp" min="40" max="110" increment="1" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Above this, the CPU temperature turns orange" />
+      <slider-setting text="CPU red at (°C)" value="cpuHotTemp" min="40" max="110" increment="1" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Above this, the CPU temperature turns red" />
+      <slider-setting text="GPU orange at (°C)" value="gpuWarnTemp" min="40" max="110" increment="1" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Above this, the GPU temperature turns orange" />
+      <slider-setting text="GPU red at (°C)" value="gpuHotTemp" min="40" max="110" increment="1" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Above this, the GPU temperature turns red" />
+      <slider-setting text="VRAM orange at (°C)" value="vramWarnTemp" min="40" max="120" increment="1" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Above this, the VRAM temperature turns orange" />
+      <slider-setting text="VRAM red at (°C)" value="vramHotTemp" min="40" max="120" increment="1" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Above this, the VRAM temperature turns red" />
+    </settings-container>
+  </tab>
+
+  <!-- Tab 3: other thresholds -->
+  <tab tags="hwtabs" tab-name="Other thresholds">
+    <settings-container>
+      <slider-setting text="Hot Spot orange at (°C)" value="gpuHotSpotWarnTemp" min="40" max="130" increment="1" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Above this, the GPU Hot Spot turns orange" />
+      <slider-setting text="Hot Spot red at (°C)" value="gpuHotSpotHotTemp" min="40" max="130" increment="1" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Above this, the GPU Hot Spot turns red" />
+      <bool-setting text="Color usage lines" value="colorLoad" apply-on-change="true" bind-value="true" hover-hint="CPU/GPU usage, VRAM and RAM turn orange then red according to the thresholds" />
+      <slider-setting text="Orange at (%)" value="loadWarn" min="10" max="100" increment="1" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Orange threshold for usage (% of load or memory)" />
+      <slider-setting text="Red at (%)" value="loadHot" min="10" max="100" increment="1" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Red threshold for usage (% of load or memory)" />
+    </settings-container>
+  </tab>
+
+  <!-- Tab 4: display -->
+  <tab tags="hwtabs" tab-name="Display">
+    <settings-container>
+      <bool-setting text="Show in menu" value="showInMenu" apply-on-change="true" bind-value="true" hover-hint="Panel visible in the menus" />
+      <bool-setting text="Show in song" value="showInSong" apply-on-change="true" bind-value="true" hover-hint="Panel visible while playing a map" />
+      <slider-setting text="Background opacity" value="opacity" min="0.1" max="1" increment="0.05" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="Transparency of the panel background" />
+      <slider-setting text="Refresh rate (ms)" value="interval" min="250" max="5000" increment="250" show-buttons="true" apply-on-change="true" bind-value="true" hover-hint="How often sensors are read (lower = more reactive)" />
+      <list-setting text="Language (reopen menu)" value="language" options="languages" apply-on-change="true" bind-value="true" hover-hint="auto = system language" />
+    </settings-container>
+  </tab>
+</vertical>

@@ -16,6 +16,9 @@ namespace HardwareHud
         public float VramUsedGb = float.NaN;
         public float VramTotalGb = float.NaN;
         public float VramTemp = float.NaN;
+        public float GpuHotSpot = float.NaN;
+        public float RamUsedGb = float.NaN;
+        public float RamTotalGb = float.NaN;
     }
 
     /// <summary>
@@ -24,7 +27,14 @@ namespace HardwareHud
     /// </summary>
     internal sealed class SensorReader : IDisposable
     {
-        readonly int _intervalMs;
+        volatile int _intervalMs;
+
+        /// <summary>Intervalle de lecture (ms), modifiable à chaud depuis le menu.</summary>
+        public int IntervalMs
+        {
+            get { return _intervalMs; }
+            set { _intervalMs = Math.Max(250, Math.Min(10000, value)); }
+        }
         readonly IPA.Logging.Logger _log;
         Computer _pc;
         Thread _thread;
@@ -45,7 +55,7 @@ namespace HardwareHud
         {
             try
             {
-                _pc = new Computer { IsCpuEnabled = true, IsGpuEnabled = true };
+                _pc = new Computer { IsCpuEnabled = true, IsGpuEnabled = true, IsMemoryEnabled = true };
                 _pc.Open();
             }
             catch (Exception e)
@@ -106,6 +116,19 @@ namespace HardwareHud
                 s.VramUsedGb = Find(gpu, SensorType.SmallData, "GPU Memory Used") / 1024f;
                 s.VramTotalGb = Find(gpu, SensorType.SmallData, "GPU Memory Total") / 1024f;
                 s.VramTemp = VramTemperature(gpu);
+                s.GpuHotSpot = FirstOfNamed(gpu, "GPU Hot Spot");
+            }
+
+            var mem = _pc.Hardware.FirstOrDefault(h => h.HardwareType == HardwareType.Memory);
+            if (mem != null)
+            {
+                float used = Find(mem, SensorType.Data, "Memory Used");
+                float avail = Find(mem, SensorType.Data, "Memory Available");
+                if (!float.IsNaN(used))
+                {
+                    s.RamUsedGb = used;
+                    if (!float.IsNaN(avail)) s.RamTotalGb = used + avail;
+                }
             }
 
             return s;

@@ -32,6 +32,8 @@ namespace HardwareHud
             public bool IsTemp;
             public Func<SensorSnapshot, float> Value;
             public Func<SensorSnapshot, float> Max;
+            public Func<float> Warn, Hot;   // seuils de couleur
+            public bool Pct;                // true : on compare Value/Max en %
             public Func<SensorSnapshot, string> Text;
             public Sparkline Graph;
             public TextMeshProUGUI ValueText;
@@ -49,6 +51,9 @@ namespace HardwareHud
 
         bool _built, _inSong, _edit, _prevCombo;
         float _nextRefresh;
+        bool _menuDone;
+        int _menuTries;
+        float _nextMenuTry;
         float _scale = 1f;
 
         XRNode? _grabNode;
@@ -110,37 +115,58 @@ namespace HardwareHud
             {
                 Label = "CPU Temp", Color = new Color(1f, 0.6f, 0.2f), IsTemp = true,
                 Value = s => s.CpuTemp, Max = s => 100f,
+                Warn = () => _cfg.cpuWarnTemp, Hot = () => _cfg.cpuHotTemp,
                 Text = s => s.CpuTemp.ToString("0") + " °C"
             });
             if (_cfg.showCpuLoad) _rows.Add(new Row
             {
                 Label = "CPU Usage", Color = new Color(0.35f, 0.8f, 1f),
-                Value = s => s.CpuLoad, Max = s => 100f,
+                Value = s => s.CpuLoad, Max = s => 100f, Pct = true,
+                Warn = () => _cfg.loadWarn, Hot = () => _cfg.loadHot,
                 Text = s => s.CpuLoad.ToString("0") + " %"
+            });
+            if (_cfg.showRam) _rows.Add(new Row
+            {
+                Label = "RAM", Color = new Color(1f, 0.85f, 0.3f),
+                Pct = true, Warn = () => _cfg.loadWarn, Hot = () => _cfg.loadHot,
+                Value = s => s.RamUsedGb,
+                Max = s => float.IsNaN(s.RamTotalGb) ? 32f : s.RamTotalGb,
+                Text = s => s.RamUsedGb.ToString("0.0") + " / " + s.RamTotalGb.ToString("0.0") + " " + Lang.MemUnit
             });
             if (_cfg.showGpuTemp) _rows.Add(new Row
             {
                 Label = "GPU Temp", Color = new Color(1f, 0.6f, 0.2f), IsTemp = true,
                 Value = s => s.GpuTemp, Max = s => 100f,
+                Warn = () => _cfg.gpuWarnTemp, Hot = () => _cfg.gpuHotTemp,
                 Text = s => s.GpuTemp.ToString("0") + " °C"
+            });
+            if (_cfg.showGpuHotSpot) _rows.Add(new Row
+            {
+                Label = "GPU Hot Spot", Color = new Color(1f, 0.6f, 0.2f), IsTemp = true,
+                Value = s => s.GpuHotSpot, Max = s => 120f,
+                Warn = () => _cfg.gpuHotSpotWarnTemp, Hot = () => _cfg.gpuHotSpotHotTemp,
+                Text = s => s.GpuHotSpot.ToString("0") + " °C"
             });
             if (_cfg.showGpuLoad) _rows.Add(new Row
             {
                 Label = "GPU Usage", Color = new Color(0.35f, 1f, 0.6f),
-                Value = s => s.GpuLoad, Max = s => 100f,
+                Value = s => s.GpuLoad, Max = s => 100f, Pct = true,
+                Warn = () => _cfg.loadWarn, Hot = () => _cfg.loadHot,
                 Text = s => s.GpuLoad.ToString("0") + " %"
             });
             if (_cfg.showVram) _rows.Add(new Row
             {
                 Label = "VRAM", Color = new Color(0.75f, 0.5f, 1f),
+                Pct = true, Warn = () => _cfg.loadWarn, Hot = () => _cfg.loadHot,
                 Value = s => s.VramUsedGb,
                 Max = s => float.IsNaN(s.VramTotalGb) ? 8f : s.VramTotalGb,
-                Text = s => s.VramUsedGb.ToString("0.0") + " / " + s.VramTotalGb.ToString("0.0") + " Go"
+                Text = s => s.VramUsedGb.ToString("0.0") + " / " + s.VramTotalGb.ToString("0.0") + " " + Lang.MemUnit
             });
             if (_cfg.showVramTemp) _rows.Add(new Row
             {
                 Label = "VRAM Temp", Color = new Color(1f, 0.6f, 0.2f), IsTemp = true,
                 Value = s => s.VramTemp, Max = s => 100f,
+                Warn = () => _cfg.vramWarnTemp, Hot = () => _cfg.vramHotTemp,
                 Text = s => s.VramTemp.ToString("0") + " °C"
             });
 
@@ -189,7 +215,7 @@ namespace HardwareHud
             // Bandeau du mode édition (au-dessus du panneau)
             _editLabel = MakeText(_root.transform, "EditLabel", 0f, -24f, PanelW, 20f, TextAlignmentOptions.Left, 11f,
                 new Color(1f, 0.9f, 0.3f));
-            _editLabel.text = "EDITION - grip: deplacer | stick haut/bas: taille | " + _editKey + ": valider";
+            _editLabel.text = Lang.EditBanner(_editKey);
             _editLabel.gameObject.SetActive(false);
 
             _built = true;
@@ -280,6 +306,8 @@ namespace HardwareHud
 
         void Update()
         {
+            TryRegisterMenu();
+
             if (!_built)
             {
                 TryBuild();
@@ -333,18 +361,47 @@ namespace HardwareHud
                 bool ok = !float.IsNaN(v);
                 row.ValueText.text = ok ? row.Text(s) : "N/A";
 
-                Color c = row.IsTemp ? TempColor(v) : row.Color;
-                row.ValueText.color = ok ? (row.IsTemp ? c : Color.white) : new Color(0.6f, 0.6f, 0.6f);
+                Color c = LevelColor(row, v, s);
+                bool alert = !row.IsTemp && _cfg.colorLoad && c != row.Color;
+                row.ValueText.color = ok ? ((row.IsTemp || alert) ? c : Color.white) : new Color(0.6f, 0.6f, 0.6f);
                 row.Graph.Push(ok ? v : 0f, row.Max(s), c);
             }
         }
 
-        Color TempColor(float v)
+        Color LevelColor(Row row, float v, SensorSnapshot s)
         {
             if (float.IsNaN(v)) return new Color(0.6f, 0.6f, 0.6f);
-            if (v >= _cfg.hotTemp) return new Color(1f, 0.3f, 0.3f);
-            if (v >= _cfg.warnTemp) return new Color(1f, 0.65f, 0.2f);
-            return new Color(0.35f, 0.9f, 0.45f);
+            if (!row.IsTemp && !_cfg.colorLoad) return row.Color;
+
+            float cmp = row.Pct ? v / Mathf.Max(row.Max(s), 0.0001f) * 100f : v;
+            if (cmp >= row.Hot()) return new Color(1f, 0.3f, 0.3f);
+            if (cmp >= row.Warn()) return new Color(1f, 0.65f, 0.2f);
+            return row.IsTemp ? new Color(0.35f, 0.9f, 0.45f) : row.Color;
+        }
+
+        /// <summary>
+        /// Ajoute le bouton dans le menu MODS. BSML n'est prêt qu'après le chargement du menu
+        /// ("Tried getting MenuButtons too early!"), donc on réessaie toutes les 2 s (30 essais max).
+        /// </summary>
+        void TryRegisterMenu()
+        {
+            if (_menuDone || Time.unscaledTime < _nextMenuTry) return;
+            _nextMenuTry = Time.unscaledTime + 2f;
+            _menuTries++;
+            try
+            {
+                ModsMenu.Register();
+                _menuDone = true;
+                Plugin.Log.Info("Bouton HardwareHud ajouté au menu MODS.");
+            }
+            catch (Exception e)
+            {
+                if (_menuTries >= 30)
+                {
+                    _menuDone = true;
+                    Plugin.Log.Warn("Bouton du menu MODS indisponible : " + e.Message);
+                }
+            }
         }
 
         // ---------------------------------------------------------------- entrées

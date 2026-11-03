@@ -10,6 +10,9 @@ namespace HardwareHud
     internal class HudConfig
     {
         public bool enabled = true;
+
+        // Langue de l'interface : "auto" (langue du système), "en" ou "fr"
+        public string language = "auto";
         public bool showInMenu = true;
         public bool showInSong = true;
 
@@ -24,10 +27,23 @@ namespace HardwareHud
         public bool showGpuLoad = true;
         public bool showVram = true;
         public bool showVramTemp = true;
+        public bool showGpuHotSpot = true;
+        public bool showRam = true;
 
-        // Seuils de couleur des températures (°C)
-        public float warnTemp = 75f;
-        public float hotTemp = 85f;
+        // Seuils de couleur des températures (°C) : vert -> orange (warn) -> rouge (hot)
+        public float cpuWarnTemp = 75f;
+        public float cpuHotTemp = 85f;
+        public float gpuWarnTemp = 75f;
+        public float gpuHotTemp = 85f;
+        public float vramWarnTemp = 85f;
+        public float vramHotTemp = 95f;
+        public float gpuHotSpotWarnTemp = 90f;
+        public float gpuHotSpotHotTemp = 105f;
+
+        // Seuils de couleur des utilisations (%), pour les lignes Usage et VRAM utilisée
+        public bool colorLoad = false;
+        public float loadWarn = 80f;
+        public float loadHot = 95f;
 
         // Touche clavier pour le mode édition (en plus des 2 sticks cliqués en VR)
         public string editKey = "F8";

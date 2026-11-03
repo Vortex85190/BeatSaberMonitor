@@ -2,9 +2,9 @@
   "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
   "id": "HardwareHud",
   "name": "HardwareHud",
-  "author": "Toi",
+  "author": "Claude AI (Anthropic)",
   "version": "1.0.0",
-  "description": "HUD de monitoring en jeu : température et utilisation CPU/GPU, VRAM, avec graphiques positionnables.",
+  "description": "In-game hardware monitoring HUD: CPU/GPU temperature and usage, GPU Hot Spot, VRAM, RAM, with movable graphs. Made with Claude AI.",
   "gameVersion": "1.40.8",
   "dependsOn": {
     "BSIPA": "^4.3.0",
