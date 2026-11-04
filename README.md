@@ -2,11 +2,11 @@
 
 ## Présentation / Overview
 
-### Français
-HardwareHud est un mod pour **Beat Saber 1.40.8** qui affiche dans le jeu les informations matérielles du PC dans un HUD flottant : utilisation et température du CPU et du GPU, GPU Hot Spot, VRAM utilisée et totale, ainsi que RAM utilisée et totale. Chaque mesure peut afficher sa valeur actuelle et un graphique d'historique. Les températures changent de couleur selon les seuils configurés. Le panneau peut être déplacé, tourné et redimensionné en VR ou au clavier, avec des positions séparées pour le menu et les parties.
-
 ### English
 HardwareHud is a mod for **Beat Saber 1.40.8** that displays the computer's hardware information in an in-game floating HUD: CPU and GPU usage and temperature, GPU Hot Spot, used and total VRAM, and used and total RAM. Each metric can show its current value and a history graph. Temperatures change color according to the configured thresholds. The panel can be moved, rotated and resized in VR or with the keyboard, with separate positions for the menu and songs.
+
+### Français
+HardwareHud est un mod pour **Beat Saber 1.40.8** qui affiche dans le jeu les informations matérielles du PC dans un HUD flottant : utilisation et température du CPU et du GPU, GPU Hot Spot, VRAM utilisée et totale, ainsi que RAM utilisée et totale. Chaque mesure peut afficher sa valeur actuelle et un graphique d'historique. Les températures changent de couleur selon les seuils configurés. Le panneau peut être déplacé, tourné et redimensionné en VR ou au clavier, avec des positions séparées pour le menu et les parties.
 
 ### 日本語
 HardwareHud は **Beat Saber 1.40.8** 用の mod です。ゲーム内のフローティング HUD に、CPU と GPU の使用率・温度、GPU Hot Spot、使用中 / 合計 VRAM、使用中 / 合計 RAM など、PC のハードウェア情報を表示します。各項目には現在値と履歴グラフを表示できます。温度は設定したしきい値に応じて色が変わります。パネルは VR またはキーボードで移動、回転、サイズ変更でき、メニューとプレイ中で別々の位置を設定できます。
