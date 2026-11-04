@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -160,7 +161,7 @@ namespace HardwareHud
                 Pct = true, Warn = () => _cfg.loadWarn, Hot = () => _cfg.loadHot,
                 Value = s => s.VramUsedGb,
                 Max = s => float.IsNaN(s.VramTotalGb) ? 8f : s.VramTotalGb,
-                Text = s => s.VramUsedGb.ToString("0.0") + " / " + s.VramTotalGb.ToString("0.0") + " " + Lang.MemUnit
+                Text = s => s.VramUsedGb.ToString("0.0" + " / " + s.VramTotalGb.ToString("0.0") + " " + Lang.MemUnit)
             });
             if (_cfg.showVramTemp) _rows.Add(new Row
             {
@@ -257,11 +258,16 @@ namespace HardwareHud
         void ApplyTransform()
         {
             if (!_built) return;
+
             var pos = _inSong ? _cfg.songPosition : _cfg.menuPosition;
             var euler = _inSong ? _cfg.songEuler : _cfg.menuEuler;
+
             _root.transform.SetPositionAndRotation(pos, Quaternion.Euler(euler));
             ApplyScale();
-            _root.SetActive(_inSong ? _cfg.showInSong : _cfg.showInMenu);
+
+            _root.SetActive(_inSong
+                ? _cfg.showInSong && !IsNoHudEnabled()
+                : _cfg.showInMenu);
         }
 
         void ApplyScale()
@@ -298,7 +304,9 @@ namespace HardwareHud
             else
             {
                 SaveTransform();
-                _root.SetActive(_inSong ? _cfg.showInSong : _cfg.showInMenu);
+                _root.SetActive(_inSong
+                    ? _cfg.showInSong && !IsNoHudEnabled()
+                    : _cfg.showInMenu);
             }
         }
 
@@ -477,6 +485,45 @@ namespace HardwareHud
                 _scale = Mathf.Clamp(_scale * (1f + sc * dt), 0.3f, 3f);
                 ApplyScale();
             }
+        }
+
+        static bool IsNoHudEnabled()
+        {
+            try
+            {
+                foreach (var obj in Resources.FindObjectsOfTypeAll<UnityEngine.Object>())
+                {
+                    if (obj == null || obj.GetType().Name != "GameplayModifiers")
+                        continue;
+
+                    var type = obj.GetType();
+
+                    FieldInfo field = type.GetField(
+                        "noHUD",
+                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                    if (field != null && field.FieldType == typeof(bool))
+                        return (bool)field.GetValue(obj);
+
+                    PropertyInfo property = type.GetProperty(
+                        "noHUD",
+                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                    if (property != null &&
+                        property.PropertyType == typeof(bool) &&
+                        property.CanRead)
+                    {
+                        return (bool)property.GetValue(obj, null);
+                    }
+                }
+            }
+            catch
+            {
+                // Si Beat Saber ne rend pas les GameplayModifiers accessibles,
+                // le HUD reste affiché normalement.
+            }
+
+            return false;
         }
     }
 }
