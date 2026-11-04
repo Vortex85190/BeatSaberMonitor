@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using LibreHardwareMonitor.Hardware;
+using System.Diagnostics;
 
 namespace HardwareHud
 {
@@ -45,6 +46,9 @@ namespace HardwareHud
 
         public SensorSnapshot Latest => _latest;
 
+        PerformanceCounter _cpuLoadCounter;
+        bool _isAdministrator;
+
         public SensorReader(int intervalMs, IPA.Logging.Logger log)
         {
             _intervalMs = intervalMs;
@@ -55,7 +59,23 @@ namespace HardwareHud
         {
             try
             {
-                _pc = new Computer { IsCpuEnabled = true, IsGpuEnabled = true, IsMemoryEnabled = true };
+                _isAdministrator = new System.Security.Principal.WindowsPrincipal(
+                    System.Security.Principal.WindowsIdentity.GetCurrent())
+                    .IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+
+                _cpuLoadCounter = new PerformanceCounter(
+                    "Processor",
+                    "% Processor Time",
+                    "_Total",
+                    true);
+
+                _pc = new Computer
+                {
+                    IsCpuEnabled = _isAdministrator,
+                    IsGpuEnabled = true,
+                    IsMemoryEnabled = true
+                };
+
                 _pc.Open();
             }
             catch (Exception e)
@@ -106,7 +126,17 @@ namespace HardwareHud
             if (cpu != null)
             {
                 s.CpuTemp = CpuTemperature(cpu);
-                s.CpuLoad = Find(cpu, SensorType.Load, "CPU Total");
+            }
+
+            try
+            {
+                s.CpuLoad = _cpuLoadCounter != null
+                    ? _cpuLoadCounter.NextValue()
+                    : float.NaN;
+            }
+            catch
+            {
+                s.CpuLoad = float.NaN;
             }
 
             if (gpu != null)
@@ -228,6 +258,13 @@ namespace HardwareHud
             _run = false;
             try { _thread?.Join(1500); } catch { }
             try { _pc?.Close(); } catch { }
+            try
+            {
+                _cpuLoadCounter?.Dispose();
+            }
+            catch
+            {
+            }
         }
     }
 }

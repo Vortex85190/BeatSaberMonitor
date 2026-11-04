@@ -42,8 +42,14 @@ namespace HardwareHud
             {
                 SetTitle("HardwareHud");
                 showBackButton = true;
-                if (Lang.IsFrench) _view = BeatSaberUI.CreateViewController<HudSettingsViewFr>();
-                else _view = BeatSaberUI.CreateViewController<HudSettingsViewEn>();
+                if (Lang.IsFrench)
+                    _view = BeatSaberUI.CreateViewController<HudSettingsViewFr>();
+                else if (Lang.IsJapanese)
+                    _view = BeatSaberUI.CreateViewController<HudSettingsViewJa>();
+                else if (Lang.IsKorean)
+                    _view = BeatSaberUI.CreateViewController<HudSettingsViewKo>();
+                else
+                    _view = BeatSaberUI.CreateViewController<HudSettingsViewEn>();
                 ProvideInitialViewControllers(_view);
             }
         }
@@ -60,7 +66,13 @@ namespace HardwareHud
     [ViewDefinition("HardwareHud.settings_en.bsml")]
     internal sealed class HudSettingsViewEn : HudSettingsViewBase { }
 
-    /// <summary>Page de réglages (settings_fr/en.bsml). Chaque changement est appliqué et sauvegardé tout de suite.</summary>
+    [ViewDefinition("HardwareHud.settings_ja.bsml")]
+    internal sealed class HudSettingsViewJa : HudSettingsViewBase { }
+
+    [ViewDefinition("HardwareHud.settings_ko.bsml")]
+    internal sealed class HudSettingsViewKo : HudSettingsViewBase { }
+
+    /// <summary>Page de réglages (settings_fr/en/ja/ko.bsml).</summary>
     internal abstract class HudSettingsViewBase : BSMLAutomaticViewController
     {
         static HudConfig Cfg { get { return Plugin.Config; } }
@@ -114,7 +126,14 @@ namespace HardwareHud
         public float Opacity { get { return Cfg.opacity; } set { Cfg.opacity = value; ApplyStyle(); } }
 
         [UIValue("languages")]
-        public List<object> Languages = new List<object> { "auto", "en", "fr" };
+        public List<object> Languages = new List<object>
+{
+    "auto",
+    "en",
+    "fr",
+    "ja",
+    "ko"
+};
 
         [UIValue("language")]
         public string Language
