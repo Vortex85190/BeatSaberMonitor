@@ -1,9 +1,11 @@
 # HardwareHud
 
+🇬🇧 [English](#english) · 🇫🇷 [Français](#français) · 🇯🇵 [日本語](#日本語) · 🇰🇷 [한국어](#한국어)
+
 ## Présentation / Overview
 
 ### English
-HardwareHud is a mod for **Beat Saber 1.40.8** that displays the computer's hardware information in an in-game floating HUD: CPU and GPU usage and temperature, GPU Hot Spot, used and total VRAM, and used and total RAM. Each metric can show its current value and a history graph. Temperatures change color according to the configured thresholds. The panel can be moved, rotated and resized in VR or with the keyboard, with separate positions for the menu and songs.
+HardwareHud is a mod for **Beat Saber 1.40.8** that displays the computer's hardware information in an in-game floating HUD: CPU and GPU usage and temperature, GPU Hot Spot, used and total VRAM, and used and total RAM. Each metric can show its current value and a history graph. Temperatures change color according to the configured thresholds. The panel can be moved, rotated, and resized in VR or with the keyboard, with separate positions for the menu and songs.
 
 ### Français
 HardwareHud est un mod pour **Beat Saber 1.40.8** qui affiche dans le jeu les informations matérielles du PC dans un HUD flottant : utilisation et température du CPU et du GPU, GPU Hot Spot, VRAM utilisée et totale, ainsi que RAM utilisée et totale. Chaque mesure peut afficher sa valeur actuelle et un graphique d'historique. Les températures changent de couleur selon les seuils configurés. Le panneau peut être déplacé, tourné et redimensionné en VR ou au clavier, avec des positions séparées pour le menu et les parties.
@@ -27,7 +29,7 @@ In-game hardware monitoring HUD for **Beat Saber 1.40.8** (BSIPA plugin). A floa
 - VRAM used / total and temperature
 - System RAM used / total
 
-Temperatures change from green to orange to red according to the thresholds you choose. The panel can be moved, rotated and resized in VR or with the keyboard (FPFC), with separate positions for the menu and songs.
+Temperatures change from green to orange to red according to the thresholds you choose. The panel can be moved, rotated, and resized in VR or with the keyboard (FPFC), with separate positions for the menu and songs.
 
 ### Requirements
 
@@ -67,7 +69,7 @@ Open **MODS → HardwareHud**. Changes apply immediately and are saved.
 | Other thresholds | GPU Hot Spot thresholds, optional usage coloring and percentage thresholds |
 | Display | Visibility in the menu or songs, background opacity, refresh rate and language |
 
-Supported language values are `auto`, `en`, `fr`, `ja` and `ko`. The menu must be reopened after changing the language.
+Supported language values are `auto`, `en`, `fr`, `ja`, and `ko`. The menu must be reopened after changing the language.
 
 ### Moving the panel
 
@@ -75,7 +77,7 @@ Press both thumbsticks at once in VR, or press `F8`, to enter edit mode. Grip th
 
 ### Configuration and troubleshooting
 
-Settings are stored in `UserData\HardwareHud.json`, including displayed lines, thresholds, opacity, `updateIntervalMs`, `language`, `editKey` and positions. If the MODS button is missing, check `Logs\` for `HardwareHud` or `BSML`. If a value is `N/A`, the sensor may be unavailable on the hardware; CPU temperature may also require a compatible LibreHardwareMonitor sensor. Build errors about missing assemblies usually mean that `BeatSaberDir` is incorrect or `Plugins\BSML.dll` is missing.
+Settings are stored in `UserData\HardwareHud.json`, including displayed lines, thresholds, opacity, `updateIntervalMs`, `language`, `editKey`, and positions. If the MODS button is missing, check `Logs\` for `HardwareHud` or `BSML`. If a value is `N/A`, the sensor may be unavailable on the hardware; CPU temperature may also require a compatible LibreHardwareMonitor sensor. Build errors about missing assemblies usually mean that `BeatSaberDir` is incorrect or `Plugins\BSML.dll` is missing.
 
 ### Credits and license
 
@@ -263,10 +265,6 @@ CPU 사용률은 관리자 권한 없이 읽습니다. CPU 온도는 프로세�
 | Display | 메뉴/플레이 중 표시, 배경 불투명도, 새로 고침 간격, 언어를 설정합니다 |
 
 언어에는 `auto`、`en`、`fr`、`ja`、`ko`를 지정할 수 있습니다. 언어를 변경한 후에는 메뉴를 다시 열어야 합니다.
-
-### 패널 이동
-
-VR에서는 양쪽 스틱을 동시에 누르거나 `F8`을 눌러 편집 모드로 들어갑니다. 그립으로 패널을 이동하거나 회전합니다. 그립 중 스틱을 위아래로 움직이면 크기를 변경할 수 있습니다. 방향키와 `PageUp` / `PageDown`으로 이동하고, `1`과 `2`로 회전하며, `+`와 `-`로 크기를 변경합니다. 같은 동작을 다시 하거나 `F8`을 누르면 저장됩니다. 메뉴와 플레이 중 위치는 서로 다릅니다.
 
 ### 설정 및 문제 해결
 
