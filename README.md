@@ -1,12 +1,18 @@
 # HardwareHud
 
-HardwareHud est un mod pour **Beat Saber 1.40.8** qui affiche en jeu les informations matérielles du PC dans un HUD flottant. Il permet de suivre en temps réel la température et l'utilisation du CPU et du GPU, la VRAM utilisée et totale, la température du GPU Hot Spot, ainsi que la RAM utilisée et totale. Chaque mesure peut être affichée avec sa valeur actuelle et un graphique d'historique.
+## Présentation / Overview
 
-Le panneau peut être déplacé, tourné et redimensionné en VR ou au clavier (FPFC). Les positions du panneau peuvent être configurées séparément pour le menu et les parties. Les températures changent de couleur selon les seuils configurés.
+### Français
+HardwareHud est un mod pour **Beat Saber 1.40.8** qui affiche dans le jeu les informations matérielles du PC dans un HUD flottant : utilisation et température du CPU et du GPU, GPU Hot Spot, VRAM utilisée et totale, ainsi que RAM utilisée et totale. Chaque mesure peut afficher sa valeur actuelle et un graphique d'historique. Les températures changent de couleur selon les seuils configurés. Le panneau peut être déplacé, tourné et redimensionné en VR ou au clavier, avec des positions séparées pour le menu et les parties.
 
-Le mod prend en charge les langues française, anglaise, japonaise et coréenne. Les capteurs sont lus avec LibreHardwareMonitorLib.
+### English
+HardwareHud is a mod for **Beat Saber 1.40.8** that displays the computer's hardware information in an in-game floating HUD: CPU and GPU usage and temperature, GPU Hot Spot, used and total VRAM, and used and total RAM. Each metric can show its current value and a history graph. Temperatures change color according to the configured thresholds. The panel can be moved, rotated and resized in VR or with the keyboard, with separate positions for the menu and songs.
 
-🇬🇧 [English](#english) · 🇫🇷 [Français](#français) · 🇯🇵 [日本語](#日本語) · 🇰🇷 [한국어](#한국어)
+### 日本語
+HardwareHud は **Beat Saber 1.40.8** 用の mod です。ゲーム内のフローティング HUD に、CPU と GPU の使用率・温度、GPU Hot Spot、使用中 / 合計 VRAM、使用中 / 合計 RAM など、PC のハードウェア情報を表示します。各項目には現在値と履歴グラフを表示できます。温度は設定したしきい値に応じて色が変わります。パネルは VR またはキーボードで移動、回転、サイズ変更でき、メニューとプレイ中で別々の位置を設定できます。
+
+### 한국어
+HardwareHud는 **Beat Saber 1.40.8**용 모드입니다. 게임 내 플로팅 HUD에 CPU와 GPU 사용률 및 온도, GPU Hot Spot, 사용 중 / 전체 VRAM, 사용 중 / 전체 RAM 등 PC 하드웨어 정보를 표시합니다. 각 항목에는 현재 값과 기록 그래프를 표시할 수 있습니다. 온도는 설정한 임계값에 따라 색상이 바뀝니다. 패널은 VR 또는 키보드로 이동, 회전, 크기 조절할 수 있으며 메뉴와 플레이 중 위치를 따로 설정할 수 있습니다.
 
 > Made with **Claude AI** (Anthropic). / Réalisé avec **Claude AI** (Anthropic).
 
@@ -199,7 +205,7 @@ VR では両方のスティックを同時に押すか、`F8` を押して編集
 
 ### 設定とトラブルシューティング
 
-設定は `UserData\HardwareHud.json` に保存されます。表示行、しきい値、不透明度、`updateIntervalMs`、`language`、`editKey`、位置などが含まれます。MODS ボタンがない場合は `Logs` で `HardwareHud` または `BSML` を検索します。値が `N/A` の場合、そのセンサーがハードウェアにない可能性があります。CPU 温度には互換性のある LibreHardwareMonitor センサーが必要な場合もあります。アセンブリ不足のビルドエラーは、一般に `BeatSaberDir` が正しくないか、`Plugins\BSML.dll` がないことを示します。
+設定は `UserData\HardwareHud.json` に保存されます。表示行、しきい値、不透明度、`updateIntervalMs`、`language`、`editKey`、位置などが含まれます。MODS ボタンが absent、`Logs\` で `HardwareHud` または `BSML` を検索します。値が `N/A` の場合、そのセンサーがハードウェアにない可能性があります。CPU 温度には互換性のある LibreHardwareMonitor センサーが必要な場合もあります。アセンブリ不足のビルドエラーは、一般に `BeatSaberDir` が正しくないか、`Plugins\BSML.dll` がないことを示します。
 
 ### クレジットとライセンス
 
@@ -253,8 +259,8 @@ CPU 사용률은 관리자 권한 없이 읽습니다. CPU 온도는 프로세�
 |---|---|
 | Tracked info | CPU, GPU, Hot Spot, VRAM, VRAM 온도, RAM 항목을 표시하거나 숨깁니다 |
 | Temp. thresholds | CPU, GPU, VRAM의 주황색 / 빨간색 임계값(°C)을 설정합니다 |
-| Other thresholds | GPU Hot Spot 임계값, 사용률 색상 표시, 백분율 임계값을 설정합니다 |
-| Display | 메뉴 / 플레이 중 표시, 배경 불투명도, 새로 고침 간격, 언어를 설정합니다 |
+| Other thresholds | GPU Hot Spot 임계값, 사용률의 색상 표시, 배경의 불투명도 임계값을 설정합니다 |
+| Display | 메뉴/플레이 중 표시, 배경 불투명도, 새로 고침 간격, 언어를 설정합니다 |
 
 언어에는 `auto`、`en`、`fr`、`ja`、`ko`를 지정할 수 있습니다. 언어를 변경한 후에는 메뉴를 다시 열어야 합니다.
 
